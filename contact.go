@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	WEBDONA_BOT_TOKEN       string
-	WEBDONA_CONTACT_CHAT_ID string
+	TELEGRAM_BOT_TOKEN string
+	TELEGRAM_CHAT_ID   string
 )
 
 type Data struct {
@@ -38,7 +38,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	text := fmt.Sprintf("<b>%s</b><pre>\n</pre><b>%s</b><pre>\n</pre><pre>%s</pre>", data.Name, data.Email, data.Body)
 
-	if req, err := http.NewRequest("GET", fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", WEBDONA_BOT_TOKEN), nil); err != nil {
+	if req, err := http.NewRequest("GET", fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN), nil); err != nil {
 
 		log.Println(err)
 
@@ -52,7 +52,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 		q.Add("text", text)
 
-		q.Add("chat_id", WEBDONA_CONTACT_CHAT_ID)
+		q.Add("chat_id", TELEGRAM_CHAT_ID)
 
 		q.Add("parse_mode", "html")
 
