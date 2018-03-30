@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Form Notfication</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+        }
+
+        body, html {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        form {
+            box-shadow: 0 0 2px 4px rgba(0, 0, 0, .2);
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        input, textarea {
+            height: 40px;
+            width: 310px;
+            border-radius: 2px;
+            margin: 10px;
+            display: block;
+            border-bottom: 1px solid grey;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            background: #404040;
+            padding: 10px;
+            width: 310px;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <form id="form" netlify netlify-honeypot="honeypot">
+        <input type="text" class="hidden" placeholder="If you're a human being don't fill this field">
+        <input type="text" name="name" placeholder="Name..." required>
+        <input type="email" name="email" placeholder="Email..." required>
+        <textarea name="message" placeholder="Message..."></textarea>
+        <button id="send" type="submit">SEND</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        
+        var form = $("#form");
+
+        var send = $("#send");
+
+        form.on("submit", function(e) {
+
+            e.preventDefault();
+
+            send.text("Sending...");
+
+            $.ajax({
+                url: "/",
+                method: "POST",
+                data: form.serialize(),
+                complete: function() {
+                    send.text("Send");
+                }
+            });
+
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[build]
+  publish = "public"
+  command = "make build"
+  functions = "functions"
+
+[build.environment]
+  # change this to your repository path
+  GO_IMPORT_PATH = "github.com/zolamk/telegram-form-notification-bot"
