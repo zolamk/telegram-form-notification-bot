@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -16,19 +16,13 @@ var (
 	TELEGRAM_CHAT_ID   string
 )
 
-type Data struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Body  string `json:"body"`
-}
-
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	data := Data{}
+	var data url.Values
 
-	if err := json.Unmarshal([]byte(request.Body), &data); err != nil {
+	var err error
 
-		log.Println(err)
+	if data, err = url.ParseQuery(request.Body); err != nil {
 
 		return events.APIGatewayProxyResponse{
 			StatusCode: 503,
@@ -36,7 +30,15 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	}
 
-	text := fmt.Sprintf("<b>%s</b><pre>\n</pre><b>%s</b><pre>\n</pre><pre>%s</pre>", data.Name, data.Email, data.Body)
+	if data.Get("honeypot") != "" {
+
+		return events.APIGatewayProxyResponse{
+			StatusCode: 403,
+		}, nil
+
+	}
+
+	text := fmt.Sprintf("<b>%s</b><pre>\n</pre><b>%s</b><pre>\n</pre><pre>%s</pre>", data.Get("name"), data.Get("email"), data.Get("message"))
 
 	if req, err := http.NewRequest("GET", fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", TELEGRAM_BOT_TOKEN), nil); err != nil {
 

@@ -57,8 +57,8 @@
 </head>
 <body>
     
-    <form id="form" netlify netlify-honeypot="honeypot">
-        <input type="text" class="hidden" placeholder="If you're a human being don't fill this field">
+    <form id="form" method="POST" action="/.netlify/functions/contact">
+        <input type="text" name="honeypot" class="hidden" placeholder="If you're a human being don't fill this field">
         <input type="text" name="name" placeholder="Name..." required>
         <input type="email" name="email" placeholder="Email..." required>
         <textarea name="message" placeholder="Message..."></textarea>
